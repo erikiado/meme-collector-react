@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useCallback } from 'react';
 import twitterLogo from './assets/twitter-logo.svg';
 import './App.css';
 import idl from './idl.json';
@@ -7,7 +7,7 @@ import { Program, Provider, web3 } from '@project-serum/anchor';
 import kp from './keypair.json'
 
 // SystemProgram is a reference to the Solana runtime!
-const { SystemProgram, Keypair } = web3;
+const { SystemProgram } = web3;
 
 const arr = Object.values(kp._keypair.secretKey)
 const secret = new Uint8Array(arr)
@@ -27,12 +27,6 @@ const opts = {
 // Constants
 const TWITTER_HANDLE = '_buildspace';
 const TWITTER_LINK = `https://twitter.com/${TWITTER_HANDLE}`;
-const TEST_GIFS = [
-	'https://i.giphy.com/media/eIG0HfouRQJQr1wBzz/giphy.webp',
-	'https://media3.giphy.com/media/L71a8LW2UrKwPaWNYM/giphy.gif?cid=ecf05e47rr9qizx2msjucl1xyvuu47d7kf25tqt2lvo024uo&rid=giphy.gif&ct=g',
-	'https://media4.giphy.com/media/AeFmQjHMtEySooOc8K/giphy.gif?cid=ecf05e47qdzhdma2y3ugn32lkgi972z9mpfzocjj6z1ro4ec&rid=giphy.gif&ct=g',
-	'https://i.giphy.com/media/PAqjdPkJLDsmBRSYUp/giphy.webp'
-]
 
 const App = () => {
   // State
@@ -214,7 +208,7 @@ const App = () => {
             {/* We use index as the key instead, also, the src is now item.gifLink */}
             {memeList.map((item, index) => (
               <div className="gif-item" key={index}>
-                <img src={item.memeLink} onClick={(e) => {
+                <img alt={item.memeLink} src={item.memeLink} onClick={(e) => {
                     upvoteMeme(e, item.memeId.toString());
                 }}/>
                 <p>{item.userAddress.toString()}</p>
@@ -227,7 +221,7 @@ const App = () => {
     }
   };
 
-  const getMemeList = async() => {
+  const getMemeList = useCallback(async() => {
     try {
       const provider = getProvider();
       const program = new Program(idl, programID, provider);
@@ -240,7 +234,7 @@ const App = () => {
       console.log("Error in getMemeList: ", error)
       setMemeList(null);
     }
-  }
+  }, []);
 
   /*
    * When our component first mounts, let's check to see if we have a connected
@@ -259,7 +253,7 @@ const App = () => {
       console.log('Fetching meme list...');
       getMemeList()
     }
-  }, [walletAddress]);
+  }, [walletAddress, getMemeList]);
 
   return (
     <div className="App">

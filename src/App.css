@@ -1,8 +1,9 @@
 .App {
   height: 100vh;
-  background-color: #1a202c;
+  background-color: #2e083e;
   overflow: scroll;
   text-align: center;
+  color: white;
 }
 
 .container {

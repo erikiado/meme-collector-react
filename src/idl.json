@@ -1,0 +1,133 @@
+{
+  "version": "0.1.0",
+  "name": "meme_collector",
+  "instructions": [
+    {
+      "name": "initialize",
+      "accounts": [
+        {
+          "name": "baseAccount",
+          "isMut": true,
+          "isSigner": true
+        },
+        {
+          "name": "user",
+          "isMut": true,
+          "isSigner": true
+        },
+        {
+          "name": "systemProgram",
+          "isMut": false,
+          "isSigner": false
+        }
+      ],
+      "args": []
+    },
+    {
+      "name": "addMeme",
+      "accounts": [
+        {
+          "name": "baseAccount",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "user",
+          "isMut": true,
+          "isSigner": true
+        }
+      ],
+      "args": [
+        {
+          "name": "memeLink",
+          "type": "string"
+        }
+      ]
+    },
+    {
+      "name": "upvoteMeme",
+      "accounts": [
+        {
+          "name": "baseAccount",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "user",
+          "isMut": true,
+          "isSigner": true
+        }
+      ],
+      "args": [
+        {
+          "name": "memeId",
+          "type": "string"
+        }
+      ]
+    }
+  ],
+  "accounts": [
+    {
+      "name": "BaseAccount",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "totalMemes",
+            "type": "u64"
+          },
+          {
+            "name": "memeList",
+            "type": {
+              "vec": {
+                "defined": "MemeStruct"
+              }
+            }
+          }
+        ]
+      }
+    }
+  ],
+  "types": [
+    {
+      "name": "MemeStruct",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "memeId",
+            "type": "u64"
+          },
+          {
+            "name": "memeLink",
+            "type": "string"
+          },
+          {
+            "name": "upvotes",
+            "type": "u64"
+          },
+          {
+            "name": "upvoters",
+            "type": {
+              "vec": "publicKey"
+            }
+          },
+          {
+            "name": "userAddress",
+            "type": "publicKey"
+          }
+        ]
+      }
+    }
+  ],
+  "errors": [
+    {
+      "code": 6000,
+      "name": "MemeNotFound",
+      "msg": "Meme not found"
+    }
+  ],
+  "metadata": {
+    "address": "6pSWkdAc67oEMBn4AGHt4oNNHD5K4Pm7h6GKMHoEV4wb"
+  }
+}
